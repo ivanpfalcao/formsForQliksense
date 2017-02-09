@@ -20,8 +20,7 @@ define( ["qlik", "jquery", "text!./style.css"], function ( qlik, $, cssContent) 
 					uses: "settings"
 				},
 				scriptURL: {                           
-					type: "string",                  
-					//ref: "fieldName",                    
+					type: "string",                                 
 					ref: "scriptURL",                    
 					label: "Script URL",                  
 					expression: "always",          
@@ -32,8 +31,7 @@ define( ["qlik", "jquery", "text!./style.css"], function ( qlik, $, cssContent) 
 					label: "Button configurations",
 					items: {
 						buttonText: {                           
-							type: "string",                  
-							//ref: "fieldName",                    
+							type: "string",                                   
 							ref: "buttonText",                    
 							label: "Submit Button Description",                  
 							expression: "always",          
@@ -55,6 +53,26 @@ define( ["qlik", "jquery", "text!./style.css"], function ( qlik, $, cssContent) 
 							defaultValue: false
 						}
 					}
+				},	
+				styleConfig: {
+					component: "expandable-items",
+					label: "Style configurations",
+					items: {
+						cssClassName: {                           
+							type: "string",                                     
+							ref: "cssClassName",                    
+							label: "CSS Class Name",                  
+							expression: "always",          
+							defaultValue: ""
+						},	
+						cssFilePath: {                           
+							type: "string",                                
+							ref: "cssFilePath",                    
+							label: "CSS File Path",                  
+							expression: "always",          
+							defaultValue: ""
+						}				
+					}
 				},
 				formObjectList: {                              
 					type: "array",                       
@@ -66,24 +84,21 @@ define( ["qlik", "jquery", "text!./style.css"], function ( qlik, $, cssContent) 
 					addTranslation: "Add Item",    					
 					items: {                                                             
 						label: {                           
-							type: "string",                  
-							//ref: "fieldName",                    
+							type: "string",                                  
 							ref: "label",                    
 							label: "Object Description",                  
 							expression: "always",          
 							defaultValue: "Object Description"            
 						},
 						objectId: {                           
-							type: "string",                  
-							//ref: "fieldName",                    
+							type: "string",                                     
 							ref: "objectId",                    
 							label: "Object ID",                  
 							expression: "always",          
 							defaultValue: "Object ID"            
 						},	
 						objectName: {                           
-							type: "string",                  
-							//ref: "fieldName",                    
+							type: "string",                                    
 							ref: "objectName",                    
 							label: "Object Name",                  
 							expression: "always",          
@@ -180,12 +195,30 @@ define( ["qlik", "jquery", "text!./style.css"], function ( qlik, $, cssContent) 
 
 				//var scriptName = "http://localhost:8000/PHP Scripts/Classes/PHPUploadFile.php";
 				var scriptName = layout.scriptURL;
-				
-				var messageText = "selecione o arquivo: ";
 				var btnText = layout.buttonText;
 				var formMethod = layout.formMethod;
 				var brMap = {true:"<br>",false: ""};
 				var separateSubButton = layout.separateSubButtonSwitch;
+				var cssClassNm = layout.cssClassName;
+				var cssFilePth = layout.cssFilePath;
+				
+				if (cssFilePth.length>0) {
+					//$( "<style>" ).attr('href',cssFilePth);
+					var linkElement = "<link id='dynamic-stylesheet' rel='stylesheet' href='" + cssFilePth + "' type='text/css' media='screen'>";
+					$("link[id='dynamic-stylesheet']").remove();
+					$("head").append(linkElement);
+				} else {
+					$("link[id='dynamic-stylesheet']").remove();
+				}
+				
+				if (cssClassNm.length>0) {
+					var divConfiguration='<div class="' + cssClassNm + '">';
+				} else {
+					var divConfiguration='<div>';
+				}
+				
+				
+				html+=divConfiguration;
 
 				html+='<form action="' + scriptName + '" method="' + formMethod + '" enctype="multipart/form-data" target="iframe">';
 				//html+='<ul>';
@@ -216,6 +249,7 @@ define( ["qlik", "jquery", "text!./style.css"], function ( qlik, $, cssContent) 
 				//html+='</li>';
 				//html+='</ul>';
 				html+='</form>';
+				html+='</div>';
 			}
 			
 			$element.html( html );

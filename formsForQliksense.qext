@@ -4,11 +4,11 @@
 	"icon": "list",
 	"type": "visualization",
 	"version": "1.0.0",
-	"author": "",
-	"homepage": "",
+	"author": "Ivan Falcao",
+	"homepage": "GLP-V3_0",
 	"keywords": "qlik-sense, visualization",
 	"license": "",
-	"repository": "",
+	"repository": "https://github.com/ivanpfalcao/formsForQliksense",
 	"dependencies": {
 		"qlik-sense": ">=3.0.x"
 	}
