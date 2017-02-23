@@ -14,4 +14,7 @@ This extension allows the use of forms inside Qliksense. It simply groups the fi
 
 - Form method: It Sets the submit method (Post or Get) 
 
+# Versions:
+- V1.1: Radio Buttons Added
+
 
