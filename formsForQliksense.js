@@ -125,6 +125,10 @@ define( ["qlik", "jquery", "text!./style.css"], function ( qlik, $, cssContent) 
 								{
 									value: "checkbox",
 									label: "Checkbox"
+								}, 
+								{
+									value: "radio",
+									label: "Radio Button"
 								}
 								
 							],
@@ -157,7 +161,44 @@ define( ["qlik", "jquery", "text!./style.css"], function ( qlik, $, cssContent) 
 								label: "same line"
 							}],
 							defaultValue: false
-						}						
+						},
+						RadioTextArea: {
+							label:"Radio Button Options",
+							component: "textarea",
+							rows: 7,//the amount of rows in the textarea component (default is 3)
+							maxlength: 5000,//will not allow more than 5000 characters
+							ref: "RadioTextArea"
+						},	
+						RadioExplanation1: {
+							label:"Radio Buttons Area uses a Key/Value Sintax:",
+							component: "text"
+						},							
+						RadioExplanation2: {
+							label:"Radio Text:::Radio Value",
+							component: "text"
+						},	
+						RadioExplanation3: {
+							label:"Use ';;;' as separator between options and ':::' between key and value",
+							component: "text"
+						},
+						RadioExplanation4: {
+							label:"Example = Text1:::Value1;;;Text2:::Value2",
+							component: "text"
+						},
+						separateRadios: {
+							type: "boolean",
+							component: "switch",
+							label: "Radios Position",
+							ref: "separateRadios",
+							options: [{
+								value: true,
+								label: "next line"
+							}, {
+								value: false,
+								label: "same line"
+							}],
+							defaultValue: false
+						}					
 					}					
 					
 				},
@@ -230,6 +271,11 @@ define( ["qlik", "jquery", "text!./style.css"], function ( qlik, $, cssContent) 
 					var objectName=layout.frmObjList[i].objectName;
 					var separateLabel=layout.frmObjList[i].separateLabelSwitch;
 					var separateObject = layout.frmObjList[i].separateFieldSwitch;
+					var separateRadios = layout.frmObjList[i].separateRadios;
+					
+					
+					
+					
 					
 					//alert(objectDescription);
 					//alert(objectID);
@@ -239,7 +285,25 @@ define( ["qlik", "jquery", "text!./style.css"], function ( qlik, $, cssContent) 
 					//html+='<li>';
 					html+=brMap[separateObject];
 					html+='<label for="' + objectID + '">' + objectDescription + '</label>' + brMap[separateLabel];
-					html+=' <input type="'+ objectType +'" id="' + objectID +'" name="' + objectName + '">';
+					
+					
+					if (objectType=='radio') {
+						var radioText = layout.frmObjList[i].RadioTextArea;
+						var radioItems = radioText.split(";;;");
+						
+						var radioItemslen = radioItems.length;
+						//alert(radioItemslen);
+						for (var kk=0;kk<radioItemslen;kk++) {
+							var radioKey = radioItems[kk].split(':::')[0];
+							var radioValue = radioItems[kk].split(':::')[1];
+							//alert(radioValue);
+							//alert(radioKey + ' & ' +radioValue);
+							html+=' <input type="'+ objectType +'" id="' + objectID +'" name="' + objectName + '" value="'+radioValue+'">' + radioKey + brMap[separateRadios];
+						}
+					} else {
+						html+=' <input type="'+ objectType +'" id="' + objectID +'" name="' + objectName + '">';
+					}
+					
 					//html+='</li>';
 				}
 				
